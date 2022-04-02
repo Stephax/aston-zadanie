@@ -1,0 +1,70 @@
+[
+  {
+    "code": "short",
+    "name": "Krátkodobé poistenie",
+    "calculateDays": true,
+    "packages": [
+      {
+        "name": "Základný",
+        "code": "base",
+        "price": 1.2
+      },
+      {
+        "name": "Rozšírený",
+        "code": "extend",
+        "price": 1.8
+      },
+      {
+        "name": "Extra",
+        "code": "extra",
+        "price": 2.4
+      }
+    ],
+    "additionalInsurances": [
+      {
+        "name": "Športové aktivity",
+        "code": "sport",
+        "percentage": 0.3
+      },
+      {
+        "name": "Storno cesty",
+        "code": "storno",
+        "percentage": 0.5
+      }
+    ]
+  },
+  {
+    "code": "year",
+    "name": "Celoročné poistenie",
+    "calculateDays": false,
+    "packages": [
+      {
+        "name": "Základný",
+        "code": "base",
+        "price": 39
+      },
+      {
+        "name": "Rozšírený",
+        "code": "extend",
+        "price": 49
+      },
+      {
+        "name": "Extra",
+        "code": "extra",
+        "price": 59
+      }
+    ],
+    "additionalInsurances": [
+      {
+        "name": "Športové aktivity",
+        "code": "sport",
+        "percentage": 0.1
+      },
+      {
+        "name": "Storno cesty",
+        "code": "storno",
+        "percentage": 0.2
+      }
+    ]
+  }
+]
