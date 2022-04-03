@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
-import Calculator from "@/components/Calculator.vue";
+import InsuranceCalculator from "@/components/InsuranceCalculator.vue";
 </script>
 
 <template>

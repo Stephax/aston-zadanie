@@ -1,11 +1,10 @@
 <script setup>
-import Calculator from "@/components/Calculator.vue";
-import FormResult from "@/components/FormResult.vue";
+import InsuranceCalculator from "@/components/InsuranceCalculator.vue";
 </script>
 
 <template>
   <div class="wrapper">
-    <Calculator></Calculator>
+    <InsuranceCalculator></InsuranceCalculator>
   </div>
 </template>
 
