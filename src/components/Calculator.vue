@@ -364,7 +364,7 @@ export default {
 input,
 select {
     &:focus {
-        box-shadow: unset;
+        box-shadow: none !important;
     }
     &[type="range"] {
         &::-webkit-slider-thumb {
