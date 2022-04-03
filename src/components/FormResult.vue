@@ -14,10 +14,13 @@
             Koniec poistenia: <strong>{{ insuranceEndDate }}</strong>
         </p>
     </Transition>
-    <p v-if="daysOfInsurance && insurancePicked !== 'Celoročné poistenie'">Počet dní poistenia: <strong>{{
-        daysOfInsurance
-    }}
-            dní</strong></p>
+    <p v-if="daysOfInsurance && insurancePicked !== 'Celoročné poistenie'">Počet dní poistenia:
+        <strong>{{ daysOfInsurance }}
+            <strong v-if="daysOfInsurance <= 1">deň</strong>
+            <strong v-else-if="daysOfInsurance >= 2 && daysOfInsurance <= 4">dni</strong>
+            <strong v-else>dní</strong>
+        </strong>
+    </p>
 
     <p v-if="insurancePackage">Balík poistenia: <strong>{{ insurancePackage }}</strong></p>
     <Transition name="slide-to-left">
