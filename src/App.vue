@@ -21,4 +21,32 @@ import Calculator from "@/components/Calculator.vue";
     padding: 0 15px;
   }
 }
+
+.slide-up-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-up-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-up-enter-from,
+.slide-up-leave-to {
+  transform: translateY(5px);
+  opacity: 0;
+}
+
+.slide-to-left-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-to-left-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-to-left-enter-from,
+.slide-to-left-leave-to {
+  transform: translateX(5px);
+  opacity: 0;
+}
 </style>

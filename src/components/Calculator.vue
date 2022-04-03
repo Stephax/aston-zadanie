@@ -31,12 +31,18 @@
         <Transition name="slide-up">
             <div class="form-row mb-4" v-if="values[insurancePicked].code == 'short'">
                 <label for="endDate">Koniec poistenia</label>
-                <input id="endDate" class="form-control" type="date" v-model="insuranceEndDate" />
+                <input
+                    id="endDate"
+                    class="form-control"
+                    type="date"
+                    v-model="insuranceEndDate"
+                    @change="compareDates"
+                />
                 <Transition name="slide-up">
                     <div
                         class="warning"
-                        v-if="attemptSubmit && missingEndDate"
-                    >Výber konca poistenia je povinný!</div>
+                        v-if="attemptSubmit && compareDates"
+                    >Konečný dátum nemôže byť menší ako začiatočný!</div>
                 </Transition>
             </div>
         </Transition>
@@ -55,9 +61,6 @@
                     :value="index"
                 >{{ pack.name }}</option>
             </select>
-            <Transition name="slide-up">
-                <div class="warning" v-if="attemptSubmit && missingPackage">Výber balíka je povinný!</div>
-            </Transition>
         </div>
         <!-- Pripoistenie -->
         <div class="form-row mb-4">
@@ -100,25 +103,30 @@
                 id="persons"
                 v-model="numberOfPersons"
             />
-            <Transition name="slide-up">
-                <div
-                    class="warning"
-                    v-if="attemptSubmit && missingNumberOfPersons"
-                >Výber počtu osôb je povinný!</div>
-            </Transition>
         </div>
     </form>
 
-    <FormResult
-        :insurancePicked="values[insurancePicked].name"
-        :insuranceStartDate="formatDate(insuranceStartDate)"
-        :insuranceEndDate="formatDate(insuranceEndDate)"
-        :insurancePackage="values[insurancePicked].packages[insurancePackage].name"
-        :additionalInsurances="pickedAdditionalInsurances"
-        :numberOfPersons="numberOfPersons"
-        :daysOfInsurance="getInsuranceDiffDays()"
-        :finalCost="calculateFinalCost"
-    />
+    <div
+        class="result"
+        v-if="!attemptSubmit && compareDates || this.values[insurancePicked].code == 'year'"
+    >
+        <FormResult
+            :insurancePicked="values[insurancePicked].name"
+            :insuranceStartDate="formatDate(insuranceStartDate)"
+            :insuranceEndDate="formatDate(insuranceEndDate)"
+            :insurancePackage="values[insurancePicked].packages[insurancePackage].name"
+            :additionalInsurances="pickedAdditionalInsurances"
+            :numberOfPersons="numberOfPersons"
+            :daysOfInsurance="getInsuranceDiffDays()"
+            :finalCost="calculateFinalCost"
+        />
+    </div>
+    <div v-else class="result">
+        <h6>
+            Prosím, pre správnu kalkuláciu
+            <strong>upravte dátum</strong>.
+        </h6>
+    </div>
 </template>
 
 <script>
@@ -146,13 +154,6 @@ export default {
         }
     },
     computed: {
-        missingInsurance: function () { return this.insurancePicked === ''; },
-        missingStartDate: function () { return this.insuranceStartDate === ''; },
-        missingEndDate: function () { return this.insuranceEndDate === ''; },
-        missingPackage: function () { return this.insurancePackage === ''; },
-        missingadditionalInsurances: function () { return this.additionalInsurances === ''; },
-        missingNumberOfPersons: function () { return this.numberOfPersons === ''; },
-
         calculateFinalCost: function () {
             let basePrice = this.values[this.insurancePicked].packages[this.insurancePackage].price;
             if (this.values[this.insurancePicked].calculateDays) {
@@ -173,8 +174,8 @@ export default {
                 result.push(this.values[this.insurancePicked].additionalInsurances[index].name);
             }
             return result;
+        },
 
-        }
 
     },
     methods: {
@@ -182,10 +183,14 @@ export default {
             if (!date) return
             return new Date(date).toLocaleDateString('sk')
         },
-
-        validateForm(event) {
-            this.attemptSubmit = true;
-            if (this.missingInsurance || this.missingStartDate || this.missingEndDate || this.missingPackage || this.missingadditionalInsurances || this.missingNumberOfPersons) return;
+        compareDates() {
+            if (this.insuranceStartDate > this.insuranceEndDate) {
+                this.attemptSubmit = true;
+                return this.insuranceEndDate === '';
+            }
+            else {
+                this.attemptSubmit = false;
+            }
         },
         incrementPerson() {
             this.numberOfPersons++;
@@ -209,7 +214,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "@/assets/_variables.scss";
 
 .insurance-form {
@@ -238,7 +243,6 @@ export default {
         font-size: 12px;
         text-align: center;
         padding: 3px 6px;
-        width: 220px;
         left: 10px;
         bottom: -27px;
         z-index: 2;
@@ -350,6 +354,9 @@ export default {
             color: $clr-white;
             font-size: 24px;
             line-height: 20px;
+            &:first-child {
+                font-size: 18px;
+            }
         }
     }
 }
@@ -410,17 +417,28 @@ button[type="submit"] {
     }
 }
 
-.slide-up-enter-active {
-    transition: all 0.3s ease-out;
-}
-
-.slide-up-leave-active {
-    transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
-}
-
-.slide-up-enter-from,
-.slide-up-leave-to {
-    transform: translateY(5px);
-    opacity: 0;
+.result {
+    width: 300px;
+    ul {
+        padding: 0;
+        li {
+            background: $clr-red;
+            color: $clr-white;
+            margin: 2px;
+            display: inline-block;
+            padding: 2px 6px;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+    }
+    p {
+        margin-bottom: 2px;
+    }
+    h5,
+    h6 {
+        strong {
+            color: $clr-red;
+        }
+    }
 }
 </style>
