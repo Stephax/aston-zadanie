@@ -33,7 +33,7 @@
     <Transition name="slide-to-left">
         <p v-if="additionalInsurances.length > 0">Pripoistenia:</p>
     </Transition>
-    <ul>
+    <ul v-if="additionalInsurances.length > 0">
         <li name="slide-to-left" v-for="(additional, index) in additionalInsurances" :key="index">
             <strong>{{ additional }}</strong>
         </li>
